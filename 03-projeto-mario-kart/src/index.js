@@ -18,6 +18,18 @@ async function rollDice() {
   return Math.floor(Math.random() * 6) + 1;
 }
 
+function getAttackType() {
+  let n = Math.random();
+  // 20% chance of bomb
+  if ( n >= 0.8 ) {
+    return 2; // return attackType 2 = bomb
+  }
+  // 80% chance os turtle shell
+  else {
+    return 1; // return attackType 1 = turtle shell
+  }
+}
+
 async function getRandomBlock() {
   let random = Math.random();
   let result;
@@ -102,7 +114,7 @@ async function playRaceEngine(character1, character2) {
       let powerResult1 = diceResult1 + character1.PODER;
       let powerResult2 = diceResult2 + character2.PODER;
 
-      console.log(`${character1.NOME} confrontou com ${character2.NOME}! 🥊`);
+      console.log(`Confronto entre ${character1.NOME} e ${character2.NOME}! 🥊`);
 
       await logRollResult(
         character1.NOME,
@@ -118,18 +130,21 @@ async function playRaceEngine(character1, character2) {
         character2.PODER
       );
 
-      if (powerResult1 > powerResult2 && character2.PONTOS > 0) {
+      let attackTypeValue = getAttackType();
+      console.log("O ataque será: " + (attackTypeValue == 1 ? "casco" : "bomba") );
+
+      if (powerResult1 > powerResult2) {
         console.log(
-          `${character1.NOME} venceu o confronto! ${character2.NOME} perdeu 1 ponto 🐢`
+          `${character1.NOME} venceu o confronto! ${character2.NOME} perdeu ${attackTypeValue} ponto 🐢`
         );
-        character2.PONTOS--;
+        character2.PONTOS -= attackTypeValue;
       }
 
-      if (powerResult2 > powerResult1 && character1.PONTOS > 0) {
+      if (powerResult2 > powerResult1) {
         console.log(
-          `${character2.NOME} venceu o confronto! ${character1.NOME} perdeu 1 ponto 🐢`
+          `${character2.NOME} venceu o confronto! ${character1.NOME} perdeu ${attackTypeValue} ponto 🐢`
         );
-        character1.PONTOS--;
+        character1.PONTOS -= attackTypeValue;
       }
 
       console.log(
@@ -146,6 +161,23 @@ async function playRaceEngine(character1, character2) {
     } else if (totalTestSkill2 > totalTestSkill1) {
       console.log(`${character2.NOME} marcou um ponto!`);
       character2.PONTOS++;
+    }
+
+    console.log("Resultado parcial:");
+    console.log(`${character1.NOME}: ${character1.PONTOS} ponto(s)`);
+    console.log(`${character2.NOME}: ${character2.PONTOS} ponto(s)`);
+
+    // check if any player has negative points, because who reach negative points gets disqualified
+    if ( (player1.PONTOS < 0) || (player2.PONTOS < 0) ) {
+
+      if ( player1.PONTOS < 0 ) {
+        console.log(`${player1.NOME} foi desclassificado porque perdeu o confronto e ficou negativo.`)
+      }
+      if ( player2.PONTOS < 0 ) {
+        console.log(`${player2.NOME} foi desclassificado porque perdeu o confronto e ficou negativo.`)
+      }
+
+      return;
     }
 
     console.log("-----------------------------");
