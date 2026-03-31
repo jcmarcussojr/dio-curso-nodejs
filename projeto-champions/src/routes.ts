@@ -9,6 +9,7 @@ router.post("/players", PlayerController.postPlayer);
 router.delete("/players/:id", PlayerController.deletePlayer);
 router.patch("/players/:id", PlayerController.updatePlayer);
 router.get("/players/:id", PlayerController.getPlayerById);
+router.get("/players_by_club/:club", PlayerController.getPlayerByClub);
 
 router.get("/clubs", ClubsController.getClubs);
 

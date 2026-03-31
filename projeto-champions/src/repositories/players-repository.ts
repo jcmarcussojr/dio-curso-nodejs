@@ -318,6 +318,12 @@ export const findPlayerById = async (
   return database.find((player) => player.id === id);
 };
 
+export const findPlayerByClub = async (
+  club: string
+): Promise<PlayerModel[] | undefined> => {
+  return database.filter((player) => player.club.toLowerCase() === club.toLowerCase());
+};
+
 export const insertPlayer = async (player: PlayerModel) => {
   database.push(player);
 };

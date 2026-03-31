@@ -30,6 +30,20 @@ export const getPlayerByIdService = async (id: number) => {
   return response;
 };
 
+export const getPlayerByClubService = async (club: string) => {
+  //pedir pro repisotório de dados
+  const data = await PlayerRepostory.findPlayerByClub(club);
+  let response = null;
+
+  if (data) {
+    response = await HttpResponse.ok(data);
+  } else {
+    response = await HttpResponse.noContent();
+  }
+
+  return response;
+};
+
 export const createPlayerService = async (player: PlayerModel) => {
   let response = null;
 

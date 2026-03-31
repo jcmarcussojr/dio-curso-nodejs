@@ -35,3 +35,9 @@ export const updatePlayer = async (req: Request, res: Response) => {
   const httpResponse = await service.updatePlayerService(id, bodyValue);
   res.status(httpResponse.statusCode).json(httpResponse.body);
 };
+
+export const getPlayerByClub = async (req: Request, res: Response) => {
+  const club = req.params.club;
+  const httpResponse = await service.getPlayerByClubService(club);
+  res.status(httpResponse.statusCode).json(httpResponse.body);
+};
